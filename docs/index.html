@@ -1,0 +1,471 @@
+<!DOCTIPE html>
+<html lang="ja">
+
+<<head>
+  <meta charset="utf-8" >
+  <title>E資格挑戦記　〜課題挑戦の軌跡〜</title>
+  <meta name="description" content="E資格受験のための勉強記録を記します。">
+  <meta name="keywords" content="E資格">
+  <link rel="stylesheet" href="style.css" type="text/css" media ="screen">
+</head>
+
+
+<body>
+<!-- #wrapprer ここから-->
+
+<div id="wrapper">
+    <header>
+      <h1>
+        <img src="images/title2.png" alt="E資格挑戦記　〜課題挑戦の軌跡〜">
+      </h1>
+    </header>
+
+    <div id="left">  </div>
+
+    <div id="right">
+      <div class="textarea">
+          <h1>深層学習day3</h1>
+          <h2>Section1：再帰型ニューラルネットワーク</h2>
+          <p>1.要点 <br>
+          ●RNNとは何か<br>
+          時系列データに適用可能なニューラルネットワーク。<br>
+          ex)音声データ、テキストデータ、株価など<br>
+          基本的な入力/中間/出力層の基本構造や関係性は変わらない。<br>
+          中間層の出力を次の中間層に受け渡すことで時間的つながりを表現する。<br>
+          RNNでは3種類の重みの設定が必要（Win/Wout/W←前の層からの重み）<br>
+          x(入力値) → u(xに重みバイアスをかける) → z(uを活性化関数に入力)　<br>
+          → v(zに重み、バイアスをかける) → y(vを活性化関数に入れる)<br><br>
+
+          ●BPTT(BackPropagationThrughTime)について<br>
+          x → u → z　→ v → yの関係性に沿って順伝搬/逆伝搬させる。<br>
+          過去の影響を受ける中間層の重み更新についてはΣがつく。<br>
+          式を展開していくと数珠つなぎて式の中に出てくる（再起的）。<br><br>
+
+          2.実装演習<br>
+          深層学習Day3の演習をまとめて以下に表示<br>
+          <a href= "3_1_simple_RNN.html" >＊＊SimpleRNN＊＊</a><br>
+          <a href= "3_3_predict_sin.html" >＊＊PredictSin＊＊</a><br>
+          <a href= "predict_word.html" >＊＊PredictWord＊＊</a><br>
+          <a href= "word2vec.html" >＊＊Word2Vecお試し＊＊</a><br><br>
+
+          3.確認テスト考察/追加レポートなど<br>
+          Q1：RNNの3つの重みの中で残りの1つは何の重みか。<br>
+          ①中間層の定義に用いられる重み、②中間層から出力される際にかけられる重み<br>
+          残りの重みについても説明せよ。<br>
+          A1：前の中間層間の影響/接続性を表現する重み<br>
+          　　時系列データの関係性を表現するために必要であり、<br>
+          　　数珠つなぎで再起的な構造を構築するための重要な重みである。<br><br>
+
+          Q2(演習チャレンジ)：　<br>
+          <img src="images/a.png" alt="answer" title="netowork", width="600" height="400">　<br>
+          A22<br><br>
+
+          Q3：連鎖率をの原理を使いdz/dxを求めよ。<br>
+              z=t^2,t=x+y<br>
+          A3：<br>
+          <img src="images/IMG_F1E7B92C263C-1.jpeg" alt="answer" title="netowork", width="600" height="400"><br><br>
+
+
+          Q4：RNNの図のバイアスを数式を用いて表せ<br>
+          A4：<br>
+          <img src="images/o.jpeg" alt="answer" title="netowork", width="600" height="400"><br><br>
+
+          Q4：コード演習問題（図参照）
+          <br>
+          <img src="images/j.png" alt="answer" title="netowork", width="600" height="400"><br>
+          A4：2 <br><br></p>
+
+          <h2>Section2：LSTM</h2>
+          <p>1.要点
+          RNNの課題は長い時間を辿るほど勾配が消失していく。<br>
+          レイヤーが深くなるほど勾配消失が起こりやすいのと同意義。<br>
+          逆に、逆伝搬の際に勾配が大きくなり、勾配が爆発するリスクがある。<br><br>
+
+          ●LSTMとは<br>
+          LSTMはRNNの一種。<br>
+          1）CEC（ConstantErrorCell）：<br>
+          中間層で過去のデータを記憶する部位。過去の勾配を1にする。<br>
+          学習機能が無いため、CECの周辺に学習/取り出し機構(入力/出力ゲート)を設ける。<br><br>
+          2）入力ゲート/出力ゲート<br>
+          CECへ記憶/出力させるための機構。<br>
+          入力ゲートの役割は、今回の入力/前回の出力値に重みをつけてCECに受け渡す。<br><br>
+          3）忘却ゲート<br>
+          古い情報を消去する機能。<br>
+          前回のCEC/忘れる割合/CECへの入力の掛け算で計算する。<br><br>
+
+          4）のぞき穴結合<br>
+          CECの状態を加味して任意のタイミングで入出力できるようにする。<br>
+          しかし、改善効果はあまりみられなかった。<br><br>
+
+          2.実装演習<br>
+          深層学習Day3の演習をまとめて以下に表示<br>
+          <a href= "3_1_simple_RNN.html" >＊＊SimpleRNN＊＊</a><br>
+          <a href= "3_3_predict_sin.html" >＊＊PredictSin＊＊</a><br>
+          <a href= "predict_word.html" >＊＊PredictWord＊＊</a><br>
+          <a href= "word2vec.html" >＊＊Word2Vecお試し＊＊</a><br><br><br>
+          3.確認テスト考察/追加レポートなど<br>
+          Q1：シグモイド関数を微分した時入力値が0の時に最大値をとる。その値はいくらか？<br>
+          A1：0.25<br><br>
+
+          Q2（演習チャレンジ）：（さ）に当てはまるのはどれか。<br>
+          <img src="images/b.png" alt="answer" title="netowork", width="600" height="400"><br>
+          A2：（1）<br><br>
+
+          Q3：「とても」はなくなっても影響しない場合、どのゲートが作用するか<br>
+          A3：忘却ゲート<br><br>
+
+          Q4：LSTMの順伝搬を作用させるプログラムの内、（け）に当てはまるのはどれか<br>
+          <img src="images/2.png" alt="answer" title="netowork", width="600" height="400"><br>
+          A4：（3）<br><br></p>
+
+
+
+          <h2>Section3：GRU</h2>
+          <p>1.要点<br>
+          LSTMはパラメータが多く複雑であったため計算負荷が高いことが課題。<br>
+          GRUはLSTMのパラメータを削減し、さらに精度が向上。<br>
+          リセット/更新ゲートで過去の情報を制御。<br><br>
+
+          2.実装演習<br>
+          深層学習Day3の演習をまとめて以下に表示<br>
+          <a href= "3_1_simple_RNN.html" >＊＊SimpleRNN＊＊</a><br>
+          <a href= "3_3_predict_sin.html" >＊＊PredictSin＊＊</a><br>
+          <a href= "predict_word.html" >＊＊PredictWord＊＊</a><br>
+          <a href= "word2vec.html" >＊＊Word2Vecお試し＊＊</a><br><br><br>
+          3.確認テスト考察/追加レポートなど<br>
+          Q1：LSTMとCECが抱える課題について、それぞれ簡潔に述べよ。<br>
+          A1：LSTMは変数が多く計算負荷が大きい。CECは記憶のみで学習機能が無いために、<br>
+          他の学習機構が必要になるため構造が複雑になる。<br><br>
+
+          Q2：GRUの順伝搬を行うプログラムの（こ）に該当する<br>
+          <img src="images/3.png" alt="answer" title="netowork", width="600" height="400"><br>
+          A2：4<br><br>
+
+          Q3：LSTMとGRUの違いについて簡潔に説明せよ<br>
+          A3：LSTMはDEC/入力/出力/忘却ゲートで過去の情報を計算するのに対して、<br>
+          GRUはリセット/更新ゲートで制御可能なため、パラメータが少なく計算負荷を低減できる。<br><br></p>
+
+
+
+          <h2>Section4：双方向RNN</h2>
+          1.要点<br>
+          過去の情報のみでなく将来の情報も加味して情報処理することで精度を向上させる。<br>
+          機会翻訳や文章などの時間的な差があまり無いデータに対して適用すると有効。<br>
+          過去から情報を伝搬する中間層と未来のから情報を伝搬する中間層の両方を加味して出絵よくを決定する。<br><br>
+
+          2.実装演習<br>
+          深層学習Day3の演習をまとめて以下に表示<br>
+          <a href= "3_1_simple_RNN.html" >＊＊SimpleRNN＊＊</a><br>
+          <a href= "3_3_predict_sin.html" >＊＊PredictSin＊＊</a><br>
+          <a href= "predict_word.html" >＊＊PredictWord＊＊</a><br>
+          <a href= "word2vec.html" >＊＊Word2Vecお試し＊＊</a><br><br><br>
+
+          3.確認テスト考察/追加レポートなど<br>
+          Q1：（か）に当てはまるのはどれか<br>
+          <img src="images/4.png" alt="answer" title="netowork", width="600" height="400"><br>
+          A1：4/過去の情報と将来の情報を同期させるためにaxis=1を選択する。<br><br>
+
+          <h2>Section5：Seq2Seq</h2>
+          <p>1.要点<br>
+          Encoder-Decoderモデルの一種。時系列のデータを入力して、時系列のデータを出力する。<br>
+          1）EncoderRNN<br>
+          　文をトークン/単語に区切ってone-hotベクトルを形成し、embeddingによりベクトルの次元を圧縮する。<br>
+          　意味の近さに従ってベクトルが割り振られる。<br>
+          　vac1をRNNに入力、HideenStateを出力し、vec2とともにRNNに入力する。<br>
+          　以上の手順で順繰りに処理を行っていく。<br>
+          　教師なし学習で学習できることが自然言語処理では重要。<br>
+          （学習データにラベルを割り振る必要がないため、大量に学習できる）<br><br>
+
+          2）DecoderRNN<br>
+          　①1単語目を作成②embeddingに従って順繰りに単語を生成（Detokenize）<br><br>
+          3）HRED<br>
+          前の文字の情報を次の情報に引き継ぐことで、文字の意味を考慮した文を生成する。<br>
+          よくある答えを返しがちになってしまう。<br><br>
+
+          4）VHRED<br>
+          HREDの課題をVARの潜在変数の概念を追加することで、多様性を持たせる。<br><br>
+          5）VAE<br>
+          　・オートエンコーダー<br>
+          　　教師なし学習。エンコーダーとデコーダーからなる構造で、次元圧縮に用いられる<br>
+          　　課題は、どのような構造に圧縮しているのかがわからないこと。<br><br>
+          　・VAE<br>
+          　　圧縮したデータを潜在変数ｚの確率分布(０から1 )に押し込める。<br>
+          　　Decoderの入力にばらつきを持たせて表現に多様性を持たせる。<br><br>
+
+          2.実装演習<br>
+          深層学習Day3の演習をまとめて以下に表示<br>
+          <a href= "3_1_simple_RNN.html" >＊＊SimpleRNN＊＊</a><br>
+          <a href= "3_3_predict_sin.html" >＊＊PredictSin＊＊</a><br>
+          <a href= "predict_word.html" >＊＊PredictWord＊＊</a><br>
+          <a href= "word2vec.html" >＊＊Word2Vecお試し＊＊</a><br><br><br>
+          3.確認テスト考察/追加レポートなど<br>
+          Q1：次の中からseq2seqについて説明しているものを選べ<br>
+          <img src="images/5.png" alt="answer" title="netowork", width="600" height="400"><br>
+          A1：（2）<br><br>
+
+          Q2：（き）に当てはまるのはどれか。<br>
+          <img src="images/6.png" alt="answer" title="netowork", width="600" height="400"><br>
+          A2：（1）one-hotベクトルとembeddingのドット積により、<br>
+          任意の単語に対応するembeddingを取り出せる<br><br>
+
+          Q3：VAEに関する以下の説明文中の空欄に当てはまる言葉を答えよ。<br>
+          　　自己符号化器の潜在変数に____を導入したもの。<br>
+          A3：確立分布<br><br>
+
+          Q4：seq2seqとHRED、HREDとVHREDの違いを簡潔に説明せよ<br>
+          A4：<br>
+          （1）seq2seqとHRED：seq2seqは文脈の意味を加味できないのに対して、HREDは文脈の意味を加味して情報を取得できる。<br>
+          （2）HREDとVHRED：HREDは表現の多様性が低いのに対して、VHREDはばらつきを加えることで表現の多様性を向上。<br><br></p>
+
+
+          <h2>Section6：Word2Vec</h2>
+          <p>1.要点<br>
+          課題；RNNでは単語のような長さの異なるものをinputできない。<br>
+          　　　固定長形式で単語を表す必要がある。<br>
+          One-hotベクトルをボキャブラリ数＊単語ベクトルの次元数の重みの行列を作成し、<br>
+          固定長の情報量の少ないベクトルに変換する。<br><br>
+
+          2.実装演習<br>
+          深層学習Day3の演習をまとめて以下に表示<br>
+          <a href= "3_1_simple_RNN.html" >＊＊SimpleRNN＊＊</a><br>
+          <a href= "3_3_predict_sin.html" >＊＊PredictSin＊＊</a><br>
+          <a href= "predict_word.html" >＊＊PredictWord＊＊</a><br>
+          <a href= "word2vec.html" >＊＊Word2Vecお試し＊＊</a><br><br><br>
+          3.確認テスト考察/追加レポートなど<br><br></p>
+
+
+          <h2>Section7：Attention Mechanism</h2>
+          <p>1.要点<br>
+          課題：seq2seqでは中間層の長さが決まっているため、長い文章に対応できない。<br>
+          解決策：文章の長さに応じて内部表現の幅を広げられるようにする必要がある。<br>
+          この解決策を取り入れたのがAttentionメカニズムである。<br>
+          単語間の関連性の強さを学習する。<br>
+
+          2.実装演習<br>
+          深層学習Day3の演習をまとめて以下に表示<br>
+          <a href= "3_1_simple_RNN.html" >＊＊SimpleRNN＊＊</a><br>
+          <a href= "3_3_predict_sin.html" >＊＊PredictSin＊＊</a><br>
+          <a href= "predict_word.html" >＊＊PredictWord＊＊</a><br>
+          <a href= "word2vec.html" >＊＊Word2Vecお試し＊＊</a><br><br><br>
+          3.確認テスト考察/追加レポートなど<br>
+          Q1：RNNとword2vec,seq2seq,Attentionの違いを簡潔に説明せよ。<br>
+          A1：RNNは過去のデータを加味したニューラルネットワークで、時系列データの処理に適している。<br>
+          　　word2vecは単語の分散表現ベクトルを得る手法<br>
+          　　seq2seqは時系列データから別の時系列データを得る手法<br>
+          　　Attentionは時系列データの関連性の重みつける<br><br></p>
+
+          <h1>深層学習day4</h1>
+          <h2>Section1：強化学習</h2>
+          <p>1.要点<br>
+          1)強化学習とは<br>
+          行動の結果として得られる報酬を最大化するように、行動を選択するように学習する方法。<br><br>
+
+          2)強化学習の応用例<br>
+          会社の販売促進<br>
+          　エージェント：販促メールを送るソフト<br>
+          　行動：顧客に対して送信する/しない<br>
+          　報酬：成約利益と広告コストの差分を報酬とする<br><br>
+          　
+          3)探索と利用のトレードオフ<br>
+          　強化学習では、前提知識が完全で無い状態でスタートするため、試行の結果得た学びから最適な手段を選択する。<br>
+          　ベストな手段のみを取ると探索ができない。一方で、未知の行動を撮り続ければ過去の経験が生かせない。<br><br>
+          　
+          4)強化学習のイメージ<br>
+          　方策/観測/報酬の3つの値から行動を決定<br>
+          5)強化学習の差分<br>
+          　教師なし学習ではパターンや構造を作ることが目的であるのに対して、<br>
+          　強化学習では、逐次的に探索し、行動結果のなかで最適な行動を選定すること<br><br>
+
+          6)行動価値関数<br>
+          　状態価値と行動価値の2つがある。<br>
+          　状態の価値のみの評価を行うのが状態価値関数<br>
+          　状態と価値の組み合わせで評価するのが行動価値関数<br><br>
+          　
+          7)方策関数<br>
+          　方策ベースの強化学習手法において、<br>
+          　ある状態に置かれた時にどのような行動をとるかの確立を与える関数のこと。<br><br>
+          　
+          8)方策勾配法<br>
+          　重みと行動価値関数の微分＊学習率の和で計算<br>
+          　行動価値関数定義を行う必要あり。<br>
+          　行動関数はある行動を取った時の総和になる。<br><br></p>
+
+          <h2>Section2：AlphaGo</h2>
+          <p>1.要点<br>
+          これまでに、Alpha Go Lee、Alpha Go Zeroの2つの方法が提案されている。<br>
+          ●Alpha Go Leeの解説<br>
+          PolicyNet:方策関数とValueNet：行動価値関数の2つのニューラルネットワークからなる。<br>
+          画像として認識させ、碁盤19x19マスに対して0,1,2で白/黒/空欄を表現するなど、その他含め、48チャンネルで表現する。<br>
+          PolicyNetは着手予想率が出力するため、softmax関数を用いて出力する。<br>
+          VAlueNetは勝率を表したいため、-1〜1の範囲で出力するため、Tanh関数で出力する。<br><br>
+
+          ・PolicyNetの学習<br>
+          ①PolicyNetの教師あり学習：実際の棋譜データを用いて学習。この学習のみで57％の精度。<br>
+          ②RollOutPolicy：ニューラルネットワークではなく、<br>
+          線形の方策関数。探索中に高速に着手確立を出すために使用される。<br>
+          PolicyNet/ValueNetの強化学習はモンテカルロ木探索を用いて行われる。<br><br>
+
+          ・ValueNetの学習<br>
+          SLPolicyNet（教師あり学習で作ったPolicyNet）を使ってN手まで打ち、N＋1手でS (N+1）手までランダムに打ち、<br>
+          その後RL PolicyNetで終局まで打つ。勝敗報酬をRとする。S(N+1)とRを教師データとして回帰問題として最小二乗誤差を計算。<br>
+          ミニバッチ32で五千万回学習。異なるPolicyNetを使う理由は、過学習の抑制。<br><br>
+
+          ●Alpha Go Zeroの解説<br>
+          強化学習のみで作ったモデル。<br>
+          石の配置のみに着目して（ヒューリスティックの排除）<br>
+          PolicyNetとValueNetを統合（policyValueNet）し、ResidualNetを導入。<br>
+          モンテカルロ探索木からロールアウトをなくした。<br>
+          ResidualBlock:ネットワークにショートカットを設けることで勾配爆発や勾配消失が<br>
+          起こりづらなることで、ネットワークを100層でも安定して学習できる。<br>
+          また、異なるネットワークでアンサンブル効果により改善。<br><br>
+
+          ・ResiduanBlockの工夫点<br>
+          　BottleNeck/PreActivation<br>
+          ・Networkの工夫点<br>
+          　WideResNet/PyramidNet<br><br></p>
+
+
+          <h2>Section3：軽量化・高速化技術</h2>
+          <p>1.要点<br>
+          分散深層学習：PCの計算速度が１８ヶ月で２倍になるのに対して深層学習の計算量は年１０倍に増加。<br>
+          　　　　　　　その変化に適合するために計算負荷を分散/並列させる必要がある。<br>
+          　　　　　　　CPU以外でのハードウェアで計算負荷を補うなど。<br><br>
+          1)データ並列<br>
+          　①PCなどの計算機を並列に接続し、計算を分散させる<br>
+          　②メインPCに機械学習用演算機をつける（GPU/TPUなど）<br>
+          　　・同期型：各ワーカーでの結果を集約して親モデルに統合する。その後親モデルや子モデルにコピー。<br>
+          　　・非同期型：バラバラにモデルに結果を反映させる。他のPCの計算が終わるのを待たない。その分スピードが早い。<br>
+          　　現在は性能の観点から同期型が主流<br>
+          　　（自分のデータセンターでは同期型、クラウド型の分散リソースの場合は非同期型で進めるのが一般的）<br><br>
+
+          2)モデル並列<br>
+          　ネットワークの途中でモデルを分割してワーカーに渡す。<br>
+          　モデル並列化は1台のPCの中でGPUごと割り振って進めるなどの方法が用いられる。<br>
+          　分散した結果を集計する必要があるので同一のPC内で行うことが望ましいため、PC間ではあまり行われない。<br>
+          　大きなモデルほど、モデルの並列化効果が得られる。<br>
+          　tensorflowで並列学習ができる。<br><br>
+          　
+          3)GPU<br>
+          　GPGPU：グラフィックのみでなく様々な計算で用いれる。<br>
+          　CPU：高性能な装置だけど並列で計算がしにくい<br>
+          　GPU：単純な行列計算に特化した演算機。簡単な計算を並列でたくさんできる<br>
+          　CUDAを使用するのが一般的。TensorFlow/PyTorchにて指定して使用可能。<br><br>
+
+          4)量子化<br>
+          　64bit浮動小数点から32bit浮動小数点などの下位の精度に落としメモリ使用量や演算負荷を低減する。<br>
+          　デメリットとして、小数点の切り捨てにより精度が下がることが挙げられる。<br><br>
+
+          5)蒸留<br>
+          巨大なニューラルネットワークモデルを用いて軽量なモデルを作る行為。<br>
+          教師モデルと生徒モデルの比較をし、誤差をに基づいて生徒モデルの重みを更新する。<br>
+          BackPropagation/Knowledge Distilation/Hint Taraingなどが手法として用いられる。<br><br>
+
+          6)プルーニング<br>
+          モデルの精度に寄与しないパラメータを削減する方法。<br>
+          モデルの軽量化と高精度化が図れる。<br>
+          重みの小さい（閾値以下）のニューロンを削減する。<br><br></p>
+
+
+          <h2>Section4：応用モデル</h2>
+          <p>1.要点<br>
+          1)MobileNet<br>
+          計算量が増えると資金が必要。環境が整っていなくても計算できるようにすることを目的に開発。<br>
+          ①DepthwiseConvolution/②PointwinseConvolutionにより畳み込みの計算量を簡素化。<br>
+          ●計算方法<br>
+          ①DepthwiseConvolution：カーネルフィルタがのチャンネルを1に固定。入力の3チャンネルごとに計算<br>
+          ②PointwinseConvolution:1x1のフィルターで畳み込み<br>
+          結論：畳み込みの方法を分けることによって計算量が減る<br><br>
+
+          2)DenseNet<br>
+          Dense Block：DenseBlock内で複数のレイヤーをもち、<br>
+          レイヤーを通るごとにチャンネルを増やす処理により情報量を増やす。<br>
+          チャンネル数の増やすレートGrouthRateがハイパーパラメータ。<br>
+          増えすぎたそうを削減する層（TransitionLayer）でチャンネル数を元に戻す。<br>
+          TransitionLayerの働きで各ブロックでの特徴量マップのサイズが一定になっている。<br><br>
+
+
+          3)BatchNorm/Layer正規化/Instance正規化<br>
+          BatchNorm：バッチ間のデータの偏りをなくすために正規化する。<br>
+          　　　　　　　バッチサイズが小さいと計算が収束しない。<br>
+          　　　　　　　計算リソースに応じてバッチサイズを変える必要が出てくるため、計算環境によって結果が左右される。<br>
+          　　　　　　　チャンネル毎に正規化。<br>
+          Layer正規化：1画像ごとに正規化。ミニバッチのサイズに影響を受けない。<br>
+          Instance正規化：1チャンネルごとに正規化。正規化の単位を細かくすることでバッチサイズの影響を受けない。<br><br>
+
+          4)Wavenet<br>
+          音声の生成モデル。<br>
+          Dilated convolutionという、深くなる程たたみ込むリンクを離すような処理を行う。<br>
+          ※次元間のつながりがあるために畳み込みニューラルネットワークが使用できる。<br>
+          長い時間範囲の情報を出力に反映できる。<br>
+          しかし、RNNでは過去の不正解がのちにも影響することで計算が不安定化する問題がある。<br>
+          そこで、TeacherForcingという正解ラベルを与えて学習させる方法により計算安定化ができる。<br>
+          デメリットとして過学習が発生するため、確立的にTeacherForcingを与えて学習をする。<br><br></p>
+
+
+          <h2>Section5：Transformer</h2>
+          <p>1.要点<br>
+          Tranformerはseq2seq(EncoderーDecoderモデル)×Attenrion。<br>
+          1)seq2seq<br>
+           系列情報から系列情報に変換する。<br>
+          　Encoderで内部状態ベクトルに変換、内部状態ベクトルを元に先頭の文字を適当な初期値で設定。<br>
+          　教師データとの差分を受けて内部ベクトルの修正により学習する。<br><br>
+          　
+          2)Self-Attention<br>
+           長文の読み込みなど、情報量の増加に対して、注意する単語を選定して情報の希薄化を防ぐ。<br>
+          　Attentionはqueryに一致するkeyを索引してvalueを抜き出すそうだとみなせる（辞書オブジェクトの機能）<br>
+          　RNNを用いずにAttention機構のみで計算するため計算負荷が少ない。<br>
+          　RNNを使っていないため、文字の位置情報を追加している。<br>
+          　注意機構には①ソースターゲット注意機構/②自己注意機構（SelfAttention）の2つある。<br>
+          　自己注意機構では注意する箇所を学習して決めるため重要な機能となる。<br>
+          　位置情報を保持したまま順伝搬させるため線形変換を行う。<br>
+          　次元に応じてスケーリングも必要。<br><br></p>
+          　
+
+          <h2>Section6：物体検知・セグメンテーション</h2>
+          <p>1.要点<br>
+          物体認識は分類/物体検出/意味領域分割/個体領域分割をにことを指す。<br>
+          分類の難易度は分類＜物体検出＜意味領域分割＜個体領域分割となる。<br>
+          自分の学習させたい内容に応じて、物体検出コンペで用いられているようなデータセットを選定する。<br><br>
+
+          ●代表的なデータセット<br>
+          VOC12：12年当初のデータセットで数も現在に比べたら少ない<br>
+          ILSVRC17：Imagenetのサブセット（1400万枚以上）クラスも多い<br>
+          MSCOCO：123000件で少ないが、位置に対する新たな指標を提案<br>
+          OICOD18：最大のデータセット<br>
+          MSCOCO18やOICOD18は物体が画像にはいっている個数が多く、日常使いに適用可能。<br><br>
+
+          ●物体認識の指標<br>
+          ・IoU：物体位置の予測精度　＝　TP/(TP＋FP FN)　　＊Jaccard係数とも呼ばれる<br>
+          ・AP：PR曲線の下側面積（クラスラベル毎）<br>
+          ・mAP：クラス毎のAPの算術平均<br>
+          ・FPS：物体検出の速度<br><br>
+
+          ●物体検知の大枠<br>
+          AlexNetの登場によりSIFTかたDCNNがトレンドに。<br>
+          物体検知のフレームワークは大きく2つ。<br>
+          ①二段回検出器：物体と領域の検出分けて行う精度が高いが計算負荷が高く時間がかかる。<br>
+          ②一段階検出器：物体と領域の検出を同時に行う。相対的に精度が低いが高速。<br><br>
+
+          ●SSD（1段階検出器）：<br>
+          デフォルトボックスを修正してconf.を出力させる。<br>
+          SSD300/512と画像サイズに応じて名称が変わる。<br>
+          VGG16と似た構造となっているが、違いはFC層をConv層に変更。<br>
+          大きさの異なる特徴的Mapを用いて出力を作成し出力1つに対してk個の特徴マップができる。<br>
+          損失関数はconfidenceに対する損失と位置に対する損失を考慮している。<br>
+
+          ●Semantic Segmentation：<br>
+          Poolingとconvolutionを行うことで情報を落とし、UP-samplingにより復元する。<br>
+          Poolingにより輪郭などのローカルな情報を落とし、<br>
+          Up-samplingにより元の解像度に戻す過程でローカルな情報を復元する。<br><br></p>
+
+
+      </div>
+
+    </div>
+
+    <div id="clearfix"></div>
+</div>
+<!-- #wrapprer ここまで-->
+
+<footer></footer>
+</body>
